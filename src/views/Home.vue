@@ -5,6 +5,10 @@
       {{ place.name }}
       {{ place.address }}
       </div>
+      <h3>Add a Place</h3>
+      <p>Name: <input type="text" v-model="newPlaceName"></p>
+      <p>Address: <input type="text" v-model="newPlaceAddress"></p>
+      <button v-on:click="addPlace">ADD</button>
   </div>
 </template>
 
@@ -18,6 +22,8 @@ export default {
     return {
       message: "Welcome to Vue.js!",
       places: [],
+      newPlaceName: "",
+      newPlaceAddress: "",
     };
   },
   created: function () {
@@ -30,6 +36,22 @@ export default {
       axios.get("http://localhost:3000/api/places").then((response) => {
         console.log(response.data);
         this.places = response.data;
+      });
+    },
+    addPlace: function () {
+      console.log("adding place....");
+      console.log(this.newPlaceName);
+
+      var params = {
+        name: this.newPlaceName,
+        address: this.newPlaceAddress,
+      };
+
+      axios.post("/api/places", params).then((response) => {
+        console.log(response.data);
+        this.places.push(response.data);
+        this.newPlaceName = "";
+        this.newPlaceAddress = "";
       });
     },
   },
