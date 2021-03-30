@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <h1>{{ message }}</h1>
+    <div v-for="place in places">
+      {{ place.name }}
+      {{ place.address }}
+      </div>
   </div>
 </template>
 
@@ -25,6 +29,7 @@ export default {
       console.log("in indexPlaces");
       axios.get("http://localhost:3000/api/places").then((response) => {
         console.log(response.data);
+        this.places = response.data;
       });
     },
   },
