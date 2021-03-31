@@ -1,14 +1,21 @@
 <template>
   <div class="home">
     <h1>{{ message }}</h1>
-    <div v-for="place in places">
-      {{ place.name }}
-      {{ place.address }}
-      </div>
       <h3>Add a Place</h3>
       <p>Name: <input type="text" v-model="newPlaceName"></p>
       <p>Address: <input type="text" v-model="newPlaceAddress"></p>
       <button v-on:click="addPlace">ADD</button>
+    <div v-for="place in places">
+      {{ place.name }} <br>
+      <p><button v-on:click="showPlace(place)">Quick View</button></p>
+      </div>
+      <dialog id="place-details">
+        <form method="dialog">
+          <h5>Quick View</h5>
+          <p>name: {{currentPlace.name}}</p>
+          <p>The address for this place is: {{currentPlace.address}}</p>
+        </form>
+      </dialog>
   </div>
 </template>
 
@@ -24,6 +31,7 @@ export default {
       places: [],
       newPlaceName: "",
       newPlaceAddress: "",
+      currentPlace: {},
     };
   },
   created: function () {
@@ -53,6 +61,12 @@ export default {
         this.newPlaceName = "";
         this.newPlaceAddress = "";
       });
+    },
+    showPlace: function (thePlace) {
+      console.log("showing a place....");
+      console.log(thePlace);
+      this.currentPlace = thePlace;
+      document.querySelector("#place-details").showModal();
     },
   },
 };
