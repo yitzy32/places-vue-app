@@ -12,8 +12,11 @@
       <dialog id="place-details">
         <form method="dialog">
           <h5>Quick View</h5>
-          <p>name: {{currentPlace.name}}</p>
-          <p>The address for this place is: {{currentPlace.address}}</p>
+          <p>Edit your inputs</p>
+          <p>name: <input type="text" v-model="currentPlace.name"></p>
+          <p>The address for this place is: <input type="text" v-model="currentPlace.address"></p>
+          <button v-on:click="updatePlace(currentPlace)">Update Place</button>
+          <button>Close</button>
         </form>
       </dialog>
   </div>
@@ -67,6 +70,18 @@ export default {
       console.log(thePlace);
       this.currentPlace = thePlace;
       document.querySelector("#place-details").showModal();
+    },
+    updatePlace: function (place) {
+      console.log("updating location....");
+
+      var params = {
+        name: place.name,
+        address: place.address,
+      };
+      axios.patch("/api/places/" + place.id, params).then((response) => {
+        console.log("place is updating");
+        this.currentPlace = {};
+      });
     },
   },
 };
