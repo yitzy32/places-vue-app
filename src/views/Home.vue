@@ -17,6 +17,7 @@
           <p>The address for this place is: <input type="text" v-model="currentPlace.address"></p>
           <button v-on:click="updatePlace(currentPlace)">Update Place</button>
           <button>Close</button>
+          <button v-on:click="destroyPlace(currentPlace)">Destroy Place</button>
         </form>
       </dialog>
   </div>
@@ -81,6 +82,13 @@ export default {
       axios.patch("/api/places/" + place.id, params).then((response) => {
         console.log("place is updating");
         this.currentPlace = {};
+      });
+    },
+    destroyPlace: function (place) {
+      axios.delete("/api/places/" + place.id).then((response) => {
+        console.log("successfully destroyed place");
+        var index = this.places.indexOf(place);
+        this.places.splice(index, 1);
       });
     },
   },
