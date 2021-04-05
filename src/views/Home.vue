@@ -2,6 +2,7 @@
   <div class="home">
     <h1>{{ message }}</h1>
       <h3>Add a Place</h3>
+      <small v-for="error in errors">{{ error }} <br></small>
       <p>Name: <input type="text" v-model="newPlaceName"></p>
       <p>Address: <input type="text" v-model="newPlaceAddress"></p>
       <button v-on:click="addPlace">ADD</button>
@@ -36,6 +37,7 @@ export default {
       newPlaceName: "",
       newPlaceAddress: "",
       currentPlace: {},
+      errors: [],
     };
   },
   created: function () {
@@ -59,12 +61,19 @@ export default {
         address: this.newPlaceAddress,
       };
 
-      axios.post("/api/places", params).then((response) => {
-        console.log(response.data);
-        this.places.push(response.data);
-        this.newPlaceName = "";
-        this.newPlaceAddress = "";
-      });
+      axios
+        .post("/api/places", params)
+        .then((response) => {
+          console.log(response.data);
+          this.places.push(response.data);
+          this.newPlaceName = "";
+          this.newPlaceAddress = "";
+          this.errors = [];
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
+          this.errors = error.response.data.error;
+        });
     },
     showPlace: function (thePlace) {
       console.log("showing a place....");
